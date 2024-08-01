@@ -1,0 +1,17 @@
+---
+- name: "Typesense | Install"
+  become: yes
+  apt:
+    deb: https://dl.typesense.org/releases/0.18.0/typesense-server-0.18.0-amd64.deb
+- name: Typesense | dossier uploads
+  become: no
+  file: state=directory path="{{ item }}"
+  with_items:
+    - "{{ root_path }}/var/log/typesense"
+    - "{{ root_path }}/var/typesense"
+- name: Typesense | Configuration
+  become: yes
+  template:
+    src: "typesense.ini.j2"
+    dest: /etc/typesense/typesense-server.ini
+  notify: typesense restart

@@ -1,0 +1,86 @@
+---
+- name: Symfony | Clone
+  become: no
+  git:
+    repo: 'https://github.com/Grafikart/Grafikart.fr.git'
+    dest: "{{ root_path }}"
+    version: master
+- name: Symfony | .env.local"
+  become: no
+  template:
+    src: .env.local.j2
+    force: no
+    dest: "{{ root_path }}/.env.local"
+- name: Symfony | CRON backup
+  become: no
+  cron:
+    name: sql dump
+    special_time: daily
+    job: "cd {{ root_path }} && php bin/console app:dump"
+- name: Symfony | CRON clean
+  become: no
+  cron:
+    name: grafikart clean
+    special_time: daily
+    job: "cd {{ root_path }} && php bin/console app:clean"
+- include_tasks: messenger.yml
+- include_tasks: mercure.yml
+- name: Symfony | var permission
+  ansible.posix.acl:
+    path: "{{ root_path }}/var"
+    entity: "{{ ansible_user }}"
+    etype: user
+    default: yes
+    permissions: rwx
+    state: present
+    recursive: yes
+- name: Symfony | var permission www-data
+  ansible.posix.acl:
+    path: "{{ root_path }}/var"
+    entity: "www-data"
+    etype: user
+    default: yes
+    permissions: rwx
+    state: present
+    recursive: yes
+- name: Symfony | var permission www-data
+  ansible.posix.acl:
+    path: "{{ root_path }}/var"
+    entity: "www-data"
+    etype: user
+    permissions: rwx
+    state: present
+    recursive: yes
+- name: Symfony | dossier uploads
+  become: no
+  file: state=directory path="{{ root_path }}/public/uploads"
+- name: Symfony | uploads permission
+  ansible.posix.acl:
+    path: "{{ root_path }}/public/uploads"
+    entity: www-data
+    etype: user
+    default: yes
+    permissions: rwx
+    state: present
+    recursive: yes
+- name: Symfony | uploads permission
+  ansible.posix.acl:
+    path: "{{ root_path }}/public/uploads"
+    entity: www-data
+    etype: user
+    permissions: rwx
+    state: present
+    recursive: yes
+- name: Symfony | uploads permission
+  ansible.posix.acl:
+    path: "{{ root_path }}/public/uploads"
+    entity: "{{ ansible_user }}"
+    etype: user
+    default: yes
+    permissions: rwx
+    state: present
+    recursive: yes
+- name: Logrotate | Rotation des logs"
+  template:
+    src: logrotate.j2
+    dest: "/etc/logrotate.d/{{ domain }}"
