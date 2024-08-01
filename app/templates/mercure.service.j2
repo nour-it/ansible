@@ -1,6 +1,6 @@
 [Unit]
 Description={{ domain }} Mercure
-Documentation=https://github.com/Grafikart/Grafikart.fr
+Documentation=https://github.com/nourit/nourit.fr
 
 [Service]
 ExecStart=/usr/local/bin/mercure --jwt-key='{{ mercure_subscriber_key }}' --publisher-jwt-key='{{ mercure_publisher_key }}' --addr=':3000' --cors-allowed-origins='*' --publish-allowed-origins='http://localhost:3000'

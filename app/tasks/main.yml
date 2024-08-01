@@ -2,7 +2,7 @@
 - name: Symfony | Clone
   become: no
   git:
-    repo: 'https://github.com/Grafikart/Grafikart.fr.git'
+    repo: 'https://github.com/nourit/nourit.fr.git'
     dest: "{{ root_path }}"
     version: master
 - name: Symfony | .env.local"
@@ -20,7 +20,7 @@
 - name: Symfony | CRON clean
   become: no
   cron:
-    name: grafikart clean
+    name: nourit clean
     special_time: daily
     job: "cd {{ root_path }} && php bin/console app:clean"
 - include_tasks: messenger.yml

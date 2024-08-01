@@ -53,7 +53,7 @@
 - name: Outils | Téléchargement .vimrc
   become: no
   get_url:
-    url: https://raw.githubusercontent.com/Grafikart/dotfiles/master/config/vim/.vimrc
+    url: https://raw.githubusercontent.com/nourit/dotfiles/master/config/vim/.vimrc
     dest: ~/.vimrc
 - name: Outils | Fish config directory
   become: no
